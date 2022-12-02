@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "target": "es6",
+    "outDir": "out",
+    "lib": ["es6"],
+    "sourceMap": true,
+    "moduleResolution": "NodeNext",
+    "allowJs": true,
+    "esModuleInterop": true
+    // "rootDir": "src",
+    // "emitDecoratorMetadata": true,
+    // "experimentalDecorators": true,
+    // "noImplicitAny": true,
+    // "noImplicitReturns": true,
+    // "noImplicitThis": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "strictNullChecks": true,
+    // "strictFunctionTypes": true,
+    // "strictPropertyInitialization": true,
+    // "noImplicitThis": true,
+    // "alwaysStrict": true,
+    // "noUnusedParameters": true,
+    // "noImplicitReturns": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noUncheckedIndexedAccess": true,
+    // "noUnusedLocals": true,
+  },
+  "include": ["src/**/*", "server.ts"]
+}
