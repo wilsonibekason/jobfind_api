@@ -5,6 +5,7 @@ import cors from "cors";
 import { logEvents, logger } from "../middleware/logEvents";
 import { errorHandler } from "../middleware/errorHandler";
 import { verifyJWT } from "../middleware/verifyJWT";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
@@ -17,8 +18,13 @@ app.get("^$|/index(.html)?", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "index.html"));
 });
 
+/// middleware for formdata
 app.use(express.urlencoded({ extended: false, limit: "", parameterLimit: 1 }));
 
+// middleware for cookies
+app.use(cookieParser());
+
+// middleware for json objects
 app.use(express.json());
 
 /// cuetom middleware
@@ -60,6 +66,8 @@ app.use("/subdir", require("./subdir"));
 app.use("/register", require("./routes/register"));
 
 app.use("/auth", require("./config/auth"));
+
+app.use("/refreshToken", require("./config/refresh"));
 
 app.use(verifyJWT);
 
