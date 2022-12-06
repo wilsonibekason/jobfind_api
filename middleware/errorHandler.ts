@@ -1,7 +1,12 @@
 import { logEvents } from "./logEvents";
 
-const errorHandler = (err, req, res, next) => {
-  logEvents(`${err.mame}: ${err.message}`, `errLog.txr`);
+interface ErrOption {
+  name: string;
+  message: string;
+  stack: string;
+}
+const errorHandler = (err: ErrOption, req, res, next) => {
+  logEvents(`${err.name}: ${err.message}`, `errLog.txr`);
   console.log(err.stack);
   res.status(500).send(err.message);
 };
