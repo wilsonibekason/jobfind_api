@@ -49,11 +49,14 @@ app.use(cors(corsOptions));
 // serve static paths
 app.use(express.static(path.join(__dirname, "./public")));
 
+// routes
 app.use("/", require("./root"));
 
 app.use("./subdir", express.static(path.join(__dirname, "./public")));
 
 app.use("/subdir", require("./subdir"));
+
+app.use("/employees", require("./routes/api/employees"))
 
 app.use(errorHandler);
 
