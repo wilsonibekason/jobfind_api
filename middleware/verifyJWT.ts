@@ -39,7 +39,7 @@ const verifyJWT = (req, res, next) => {
   console.log(authHeader); // Bearer token
   const token = authHeader.split(" ")[1];
   jwt.verify(
-    jwt,
+    token,
     process.env.ACCESS_TOKEN_SECRET,
     (err, decoded: { username: string; UserInfo?: { user: string } }) => {
       if (err) return res.sendStatus(403); // invalid token

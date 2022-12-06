@@ -1,5 +1,6 @@
 import express from "express";
 import path from "path";
+import { verifyJWT } from "../../middleware/verifyJWT";
 import {
   createNewEmployee,
   deleteEmployee,
@@ -31,7 +32,7 @@ router
   .get((req, res) => {
     res.json(data.employees);
   })
-  .post(createNewEmployee)
+  .post(verifyJWT, createNewEmployee)
   .put((req, res) => {
     (data.employees as TEP[]).forEach((employee) => {
       if (employee.id === req.body.id) {

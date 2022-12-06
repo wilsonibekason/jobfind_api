@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import cors from "cors";
 import { logEvents, logger } from "../middleware/logEvents";
 import { errorHandler } from "../middleware/errorHandler";
+import { verifyJWT } from "../middleware/verifyJWT";
 
 const app = express();
 
@@ -56,11 +57,13 @@ app.use("./subdir", express.static(path.join(__dirname, "./public")));
 
 app.use("/subdir", require("./subdir"));
 
-app.use("/employees", require("./routes/api/employees"));
-
 app.use("/register", require("./routes/register"));
 
 app.use("/auth", require("./config/auth"));
+
+app.use(verifyJWT);
+
+app.use("/employees", require("./routes/api/employees"));
 
 app.use(errorHandler);
 
