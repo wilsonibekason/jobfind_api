@@ -2,17 +2,18 @@ import data from "../model/users.json";
 import { promises } from "fs";
 import path from "path";
 import bcrypt from "bcrypt";
-type TUser = {
+export type TUser = {
   username: string;
   pwd: string;
   token: string;
 };
-interface TUsers {
+export interface TUsers {
   users: TUser[];
+  setUsers: (data: TUser) => void;
 }
 const usersDB: TUsers = {
   users: data,
-  setUsers: function (data) {
+  setUsers: function (data: TUser) {
     this.users = data;
   },
 };

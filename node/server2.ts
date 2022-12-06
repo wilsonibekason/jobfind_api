@@ -60,6 +60,8 @@ app.use("/employees", require("./routes/api/employees"));
 
 app.use("/register", require("./routes/register"));
 
+app.use("/auth", require("./config/auth"));
+
 app.use(errorHandler);
 
 app.get("/new-page.html", (req, res) => {
