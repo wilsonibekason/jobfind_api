@@ -15,6 +15,47 @@ const createNewEmployee = (req, res) => {
     lastname: req.body.lastname,
   });
 };
+const createEmployee = (req, res) => {
+  const newEmployee: TEP = {
+    id:
+      (data.employees as TEP[])[(data.employees as TEP[]).length - 1].id + 1 ||
+      1,
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+  };
+  !newEmployee.firstname ||
+    (!newEmployee.lastname &&
+      res
+        .status(400)
+        .json({ message: "first name and last name is required" }));
+  //@ts-ignore
+  data.setEmployees([...data.employees, newEmployee]);
+
+  res.status(201).json(data.employees);
+};
+
+const updateEmployees = (req, res) => {
+  const employee = (data.employees as TEP[]).find(
+    (e) => e.id === parseInt(req.body.id)
+  );
+  if (!employee) {
+    return res.status(404).json({ message: "Employee not found" });
+  }
+  if (req.body.firstname !== employee.firstname) {
+    employee.firstname = req.body.firstname;
+  }
+  if (req.boxy.firstname) employee.lastname = req.boxy.firstname;
+  if (req.boxy.lastname) employee.lastname = req.boxy.lastname;
+  const filteredArray = (data.employees as TEP[]).filter(
+    (e) => e.id !== parseInt(req.body.id)
+  );
+  const unsortedArray = [...filteredArray, employee];
+  //   @ts-ignore
+  data.setEmployees(
+    unsortedArray.sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0))
+  );
+  res.status(201).json(data.employees);
+};
 
 const updateEmployee = (req, res) => {
   (data.employees as TEP[]).forEach((employee) => {
@@ -35,12 +76,38 @@ const updateEmployee = (req, res) => {
   });
 };
 
+const removeEmloyee = (req, res) => {
+  const employee = (data.employees as TEP[]).find((e) => e.id === req.body.id);
+  if (!employee) {
+    return res.status(404).json({ message: "Employee not found" });
+  }
+  const filteredArray = (data.employees as TEP[]).filter(
+    (e) => e.id !== req.body.id
+  );
+  const unsortedArray = [...filteredArray, employee];
+  //   @ts-ignore
+  data.setEmployees([...filteredArray]);
+  res.status(201).json(data.employees);
+};
+
 const deleteEmployee = (req, res) => {
   res.json({
     id: req.body.id,
     message: "Employee deleted",
     updated: true,
   });
+};
+
+const getEmployee = (req, res) => {
+  const employee = (data.employees as TEP[]).find(
+    (e) => e.id === parseInt(req.params.id)
+  );
+  if (!employee) {
+    return res
+      .status(404)
+      .json({ message: `Employee ${req.params.id} not found` });
+  }
+  res.json(employee);
 };
 
 const getEmployeeById = (req, res) => {

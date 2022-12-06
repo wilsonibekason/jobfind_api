@@ -20,6 +20,7 @@ export type TEP = {
 
 export interface TData {
   employees?: TEP[];
+  setEmployees?(data: TEP): void | TEP | any;
 }
 const data: TData = {};
 
