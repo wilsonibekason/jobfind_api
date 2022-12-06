@@ -7,6 +7,9 @@ export type TUser = {
   pwd: string;
   token: string;
   refreshToken: string;
+  roles: <S>{Admin?: S,
+    Editor?: S,
+    User?: S};
 };
 export interface TUsers {
   users: TUser[];
@@ -36,7 +39,11 @@ const handleNewUser = async (req, res) => {
     //encrypt password
     const hashedPwd = await bcrypt.hash(pwd, 10);
     // store the user
-    const newUser = { Username: user, password: hashedPwd };
+    const newUser = {
+      Username: user,
+      roles: { User: 2001 },
+      password: hashedPwd,
+    };
     usersDB.setUsers([...usersDB.users, newUser]);
     await promises.writeFile(
       path.join(__dirname, "..", "model", "users.json"),

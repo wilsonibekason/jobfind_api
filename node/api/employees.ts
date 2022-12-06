@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
+import { ROLES_LIST } from "../../config/roles_list";
 import { verifyJWT } from "../../middleware/verifyJWT";
+import { verifyRoles } from "../../middleware/verifyRoles";
 import {
   createNewEmployee,
   deleteEmployee,
@@ -32,7 +34,7 @@ router
   .get((req, res) => {
     res.json(data.employees);
   })
-  .post(verifyJWT, createNewEmployee)
+  .post(verifyRoles(ROLES_LIST.Admin, ROLES_LIST.Editor), createNewEmployee)
   .put((req, res) => {
     (data.employees as TEP[]).forEach((employee) => {
       if (employee.id === req.body.id) {
@@ -51,12 +53,13 @@ router
       message: "Employee updated",
     });
   })
-  .delete((req, res) => {
+  .delete(verifyRoles(ROLES_LIST.Admin), (req, res) => {
     res.json({
       id: req.body.id,
       message: "Employee deleted",
       updated: true,
     });
+    res.cookie("", {});
   });
 
 router.route("/:id").get((req, res) => {

@@ -28,10 +28,14 @@ const handleLogin = async (req, res) => {
 
   const match = await bcrypt.compare(pwd, foundUser.username);
   if (match) {
+    const roles = Object.values(foundUser.roles);
     //
     const accesToken = jwt.sign(
       {
-        username: foundUser.username,
+        UserInfo: {
+          username: foundUser.username,
+          roles: roles,
+        },
       },
       process.env.ACCESSS_TOKEN_SECRET,
       {
