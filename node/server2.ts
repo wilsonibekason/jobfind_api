@@ -6,6 +6,8 @@ import { logEvents, logger } from "../middleware/logEvents";
 import { errorHandler } from "../middleware/errorHandler";
 import { verifyJWT } from "../middleware/verifyJWT";
 import cookieParser from "cookie-parser";
+import { corsOptions } from "../config/corsOptions";
+import credientials from "../middleware/credentials";
 
 const app = express();
 
@@ -40,17 +42,20 @@ app.delete("");
 
 const whiteList = [""];
 
-const corsOptions = {
-  origin: (origin, callback: <N, B>(N?, B?) => void) => {
-    if (whiteList.indexOf(origin) !== -1 || !origin) {
-      callback<null, boolean>(null, true);
-    } else {
-      callback(new Error("Not Alloe"));
-    }
-  },
-  optionSuccessStatus: 200,
-};
+// const corsOptions = {
+//   origin: (origin, callback: <N, B>(arg0?: N, arg1?: B) => void) => {
+//     if (whiteList.indexOf(origin) !== -1 || !origin) {
+//       callback<null, boolean>(null, true);
+//     } else {
+//       callback(new Error("Not Alloe"));
+//     }
+//   },
+//   optionSuccessStatus: 200,
+// };
 
+app.use(credientials);
+
+/// MAKE SURE TO PASS THE CREDENTIALS BEFORE THR CORS_OPTIONS
 app.use(cors(corsOptions));
 
 // serve static paths
@@ -68,6 +73,10 @@ app.use("/register", require("./routes/register"));
 app.use("/auth", require("./config/auth"));
 
 app.use("/refreshToken", require("./config/refresh"));
+
+app.use("/logout", require("./config/logout"));
+
+/// jwt verified verifyJWT routes
 
 app.use(verifyJWT);
 

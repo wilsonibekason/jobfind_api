@@ -18,15 +18,14 @@ const handleRefreshToken = async (req, res) => {
   const cookies = req.cookies;
   const { user, pwd } = req.body;
 
-  if (!cookies?.jwt) return res.status(401);
+  if (!cookies?.jwt) return res.sendStatus(401);
   console.log(cookies?.jwt);
   const refreshToken = cookies.jwt;
 
   const foundUser = usersDB.users.find(
     (person) => person.refreshToken === refreshToken
   );
-  if (!foundUser)
-    return res.status(401).sendStatus(403).json({ message: "NO USER FOUND " }); // Forbidden
+  if (!foundUser) return res.status(401).json({ message: "NO USER FOUND " }); // Forbidden
 
   jwt.verify(
     refreshToken,
