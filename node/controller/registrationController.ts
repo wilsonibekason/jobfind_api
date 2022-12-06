@@ -6,6 +6,7 @@ export type TUser = {
   username: string;
   pwd: string;
   token: string;
+  refreshToken: string;
 };
 export interface TUsers {
   users: TUser[];

@@ -28,17 +28,21 @@ const handleRefreshToken = async (req, res) => {
   if (!foundUser)
     return res.status(401).sendStatus(403).json({ message: "NO USER FOUND " }); // Forbidden
 
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-    if (err || foundUser.username !== decoded.username)
-      return res.status(401).sendStatus(403);
-    const accessToken = jwt.sign(
-      { username: decoded.username },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "100s" }
-    );
-    res.cookie("jwt", accessToken, { httpOnly: true });
-    res.status(201).json({ accessToken });
-  });
+  jwt.verify(
+    refreshToken,
+    process.env.REFRESH_TOKEN_SECRET,
+    (err, decoded: { username: string }) => {
+      if (err || foundUser.username !== decoded.username)
+        return res.status(401).sendStatus(403);
+      const accessToken = jwt.sign(
+        { username: decoded.username },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: "100s" }
+      );
+      res.cookie("jwt", accessToken, { httpOnly: true });
+      res.status(201).json({ accessToken });
+    }
+  );
 };
 
 export { handleRefreshToken };
