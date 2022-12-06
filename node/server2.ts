@@ -56,7 +56,9 @@ app.use("./subdir", express.static(path.join(__dirname, "./public")));
 
 app.use("/subdir", require("./subdir"));
 
-app.use("/employees", require("./routes/api/employees"))
+app.use("/employees", require("./routes/api/employees"));
+
+app.use("/register", require("./routes/register"));
 
 app.use(errorHandler);
 

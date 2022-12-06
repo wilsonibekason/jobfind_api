@@ -52,6 +52,7 @@ const updateEmployees = (req, res) => {
   const unsortedArray = [...filteredArray, employee];
   //   @ts-ignore
   data.setEmployees(
+    // @ts-ignore
     unsortedArray.sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0))
   );
   res.status(201).json(data.employees);
