@@ -8,10 +8,15 @@ import { verifyJWT } from "../middleware/verifyJWT";
 import cookieParser from "cookie-parser";
 import { corsOptions } from "../config/corsOptions";
 import credientials from "../middleware/credentials";
+import mongoose from "mongoose";
+import { connectDB } from "../config/dbConn";
 
 const app = express();
 
 const PORT = process.env.PORT || 5000;
+
+// connect to MongoDB
+connectDB();
 
 config();
 
@@ -129,4 +134,8 @@ app.get(
     res.send("Hello");
   }
 );
-app.listen(PORT, () => console.log(`port runung n port ${PORT}`));
+
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () => console.log(`port runung n port ${PORT}`));
+});
