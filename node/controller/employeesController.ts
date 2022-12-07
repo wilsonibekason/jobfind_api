@@ -1,5 +1,6 @@
 import model from "../data/employee.json";
 import { TData, TEP } from "../api/employees";
+import { Employee } from "../model/Employee";
 const data: TData = {};
 data.employees = model;
 
@@ -15,21 +16,34 @@ const createNewEmployee = (req, res) => {
     lastname: req.body.lastname,
   });
 };
-const createEmployee = (req, res) => {
-  const newEmployee: TEP = {
-    id:
-      (data.employees as TEP[])[(data.employees as TEP[]).length - 1].id + 1 ||
-      1,
-    firstname: req.body.firstname,
-    lastname: req.body.lastname,
-  };
-  !newEmployee.firstname ||
-    (!newEmployee.lastname &&
-      res
-        .status(400)
-        .json({ message: "first name and last name is required" }));
-  //@ts-ignore
-  data.setEmployees([...data.employees, newEmployee]);
+const createEmployee = async (req, res) => {
+  if (!req.body.firstname || !req.body.lastname)
+    return res
+      .status(400)
+      .json({ message: "First and Last names are required " });
+
+  try {
+    const result = await Employee.create({
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+    });
+  } catch (error) {
+    error instanceof Error && error.message;
+  }
+  // const newEmployee: TEP = {
+  //   id:
+  //     (data.employees as TEP[])[(data.employees as TEP[]).length - 1].id + 1 ||
+  //     1,
+  //   firstname: req.body.firstname,
+  //   lastname: req.body.lastname,
+  // };
+  // !newEmployee.firstname ||
+  //   (!newEmployee.lastname &&
+  //     res
+  //       .status(400)
+  //       .json({ message: "first name and last name is required" }));
+  // //@ts-ignore
+  // data.setEmployees([...data.employees, newEmployee]);
 
   res.status(201).json(data.employees);
 };
