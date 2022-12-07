@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { TUsers, TUser } from "./registrationController";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
+import { User } from "../model/User";
 const usersDB: TUsers = {
   users: data,
   setUsers: function (data: TUser) {
@@ -25,6 +26,8 @@ const handleRefreshToken = async (req, res) => {
   const foundUser = usersDB.users.find(
     (person) => person.refreshToken === refreshToken
   );
+
+  const foundedUser = await User.findOne({ refreshToken }).exec();
   if (!foundUser) return res.status(401).json({ message: "NO USER FOUND " }); // Forbidden
 
   jwt.verify(

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const UsersSchema = new Schema({
+const userSchema = new Schema({
   username: {
     type: String,
     requied: true,
@@ -15,4 +15,13 @@ const UsersSchema = new Schema({
     Editor: Number,
     Admin: Number,
   },
+  password: {
+    type: String,
+    required: true,
+  },
+  refreshToken: String,
 });
+
+const User = mongoose.model("User", userSchema);
+
+export { User };
