@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import { TUsers, TUser } from "./registrationController";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
+import { User } from "../model/User";
 const usersDB: TUsers = {
   users: data,
   setUsers: function (data: TUser) {
@@ -22,7 +23,10 @@ const handleLogin = async (req, res) => {
       .status(400)
       .json({ message: "Username and Password is invalid" });
 
-  const foundUser = usersDB.users.find((person) => person.username === user);
+  const foundUserOld = usersDB.users.find((person) => person.username === user);
+
+  const foundUser = await User.findOne({ username: user }).exec();
+
   if (!foundUser)
     return res.status(401).sendStatus(401).json({ message: "NO USER FOUND " });
 
@@ -51,15 +55,19 @@ const handleLogin = async (req, res) => {
         expiresIn: "1d",
       }
     );
-    const otherUser = usersDB.users.filter(
-      (person) => person.username !== foundUser.username
-    );
-    const currentUser = { ...foundUser, refreshToken };
-    usersDB.setUsers([...otherUser, currentUser]);
-    await promises.writeFile(
-      path.join(__dirname, "..", "model", "user.json"),
-      JSON.stringify(usersDB.users)
-    );
+    // const otherUser = usersDB.users.filter(
+    //   (person) => person.username !== foundUser.username
+    // );
+    // const currentUser = { ...foundUser, refreshToken };
+    // usersDB.setUsers([...otherUser, currentUser]);
+    // await promises.writeFile(
+    //   path.join(__dirname, "..", "model", "user.json"),
+    //   JSON.stringify(usersDB.users)
+    // );
+    foundUser.refreshToken = refreshToken;
+    const result = await foundUser.save();
+    console.log(result);
+
     res.cookie("jwt", refreshToken, {
       httpOnly: true,
       sameSite: "None",

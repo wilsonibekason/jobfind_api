@@ -48,12 +48,17 @@ const createEmployee = async (req, res) => {
   res.status(201).json(data.employees);
 };
 
-const updateEmployees = (req, res) => {
-  const employee = (data.employees as TEP[]).find(
-    (e) => e.id === parseInt(req.body.id)
-  );
+const updateEmployees = async (req, res) => {
+  // const employee = (data.employees as TEP[]).find(
+  //   (e) => e.id === parseInt(req.body.id)
+  // );
+
+  if (!req.body.id)
+    return res.status(400).json({ message: "No employee id found" });
+
+  const employee = Employee.findOne({ _id: req.body.id });
   if (!employee) {
-    return res.status(404).json({ message: "Employee not found" });
+    return res.status(204).json({ message: "Employee not found" });
   }
   if (req.body.firstname !== employee.firstname) {
     employee.firstname = req.body.firstname;
@@ -69,6 +74,8 @@ const updateEmployees = (req, res) => {
     // @ts-ignore
     unsortedArray.sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0))
   );
+
+  const result = await  employee.save()
   res.status(201).json(data.employees);
 };
 

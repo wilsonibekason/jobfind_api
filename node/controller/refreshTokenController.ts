@@ -64,3 +64,5 @@ const refreshToken = async (req, res) => {
     }
   }
 };
+
+export { refreshToken };
